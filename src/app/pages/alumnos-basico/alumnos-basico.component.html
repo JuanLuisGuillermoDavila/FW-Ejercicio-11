@@ -1,0 +1,46 @@
+<div class="container-fluid p-3">
+  <h1>Listado de alumnos</h1>
+
+  <button class="btn btn-success btn-sm" (click)="s.mostrarTabla.set(!s.mostrarTabla())">
+    {{ s.mostrarTabla() ? 'Ocultar Tabla' : 'Mostrar Tabla' }}
+  </button>
+
+  <label class="form-label d-block mt-3">Ingrese Nombre</label>
+  <input class="form-control" placeholder="Alumno a buscar"
+         [ngModel]="s.busqueda()" (ngModelChange)="s.busqueda.set($event)" />
+
+  <label class="form-label d-block mt-3">Ingrese Carrera</label>
+  <select class="form-select" [ngModel]="s.carrera()" (ngModelChange)="s.carrera.set($event)">
+    <option value="Todas">Todas</option>
+    @for (c of s.carreras(); track c) {
+      <option [value]="c">{{ c }}</option>
+    }
+  </select>
+
+  @if (s.mostrarTabla()) {
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>#</th><th>Matrícula</th><th>Nombre</th><th>Carrera</th><th>Semestre</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (a of s.filtrados(); track a.id) {
+          <tr>
+            <th>{{ a.id }}</th>
+            <td>{{ a.matricula }}</td>
+            <td>{{ a.nombre }}</td>
+            <td>{{ a.carrera }}</td>
+            <td>{{ a.semestre }}</td>
+            <td><span class="badge" [class]="s.badgeClass(a.status)">{{ a.status }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <h1 class="mt-4">Estadisticas</h1>
+  <div class="alert alert-primary">Total alumnos: {{ s.totalAlumnos() }}</div>
+  <div class="alert alert-primary">Total activos: {{ s.totalActivos() }}</div>
+  <div class="alert alert-primary">Total egresados: {{ s.totalEgresados() }}</div>
+</div>
